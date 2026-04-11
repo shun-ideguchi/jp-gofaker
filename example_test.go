@@ -7,6 +7,7 @@ import (
 )
 
 func Example() {
+	// 公開 API の基本的な利用例と出力例を示す。
 	g := jpfaker.New(jpfaker.WithSeed(1))
 
 	name := g.Person().Name()
