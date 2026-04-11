@@ -1,4 +1,4 @@
-module github.com/shun-ideguchi/gofaker
+module github.com/shun-ideguchi/jp-gofaker
 
 go 1.23.0
 

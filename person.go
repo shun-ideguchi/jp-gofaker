@@ -1,69 +1,43 @@
-package gofaker
+package jpfaker
 
-import (
-	"fmt"
+import "github.com/shun-ideguchi/jp-gofaker/internal/dataset"
 
-	"github.com/shun-ideguchi/gofaker/data"
-)
-
-// LastName はランダムな日本の苗字を返します。
-func (f *Faker) LastName() string {
-	return data.Person["lastName"][f.Rand.Intn(len(data.Person["lastName"]))]
+type PersonGenerator struct {
+	g *Generator
 }
 
-// FirstName はランダムな日本の名前を返します。
-func (f *Faker) FirstName() string {
-	return data.Person["firstName"][f.Rand.Intn(len(data.Person["firstName"]))]
+func (p PersonGenerator) LastName() string {
+	return p.Name().LastName
 }
 
-// FullName はランダムな日本の苗字と名前を返します。
-func (f *Faker) FullName() string {
-	return f.LastName() + " " + f.FirstName()
+func (p PersonGenerator) FirstName() string {
+	return p.Name().FirstName
 }
 
-// LastNameKana はランダムな日本の苗字のフリガナを返します。
-func (f *Faker) LastNameKana() string {
-	return data.LastNameKana[f.LastName()]
+func (p PersonGenerator) FullName() string {
+	return p.Name().FullName()
 }
 
-// FirstNameKana はランダムな日本の名前のフリガナを返します。
-func (f *Faker) FirstNameKana() string {
-	return data.FirstNameKana[f.FirstName()]
+func (p PersonGenerator) LastNameKana() string {
+	return p.Name().LastNameKana
 }
 
-// LastNameKanaBy は指定された苗字のフリガナを返します。
-func (f *Faker) LastNameKanaBy(lastName string) string {
-	if kana, ok := data.LastNameKana[lastName]; ok {
-		return kana
+func (p PersonGenerator) FirstNameKana() string {
+	return p.Name().FirstNameKana
+}
+
+func (p PersonGenerator) FullNameKana() string {
+	return p.Name().FullNameKana()
+}
+
+func (p PersonGenerator) Name() PersonName {
+	last := dataset.PersonLastNames[p.g.rng.Intn(len(dataset.PersonLastNames))]
+	first := dataset.PersonFirstNames[p.g.rng.Intn(len(dataset.PersonFirstNames))]
+
+	return PersonName{
+		LastName:      last.Text,
+		FirstName:     first.Text,
+		LastNameKana:  last.Kana,
+		FirstNameKana: first.Kana,
 	}
-
-	return f.LastNameKana()
-}
-
-// FirstNameKanaBy は指定された名前のフリガナを返します。
-func (f *Faker) FirstNameKanaBy(firstName string) string {
-	if kana, ok := data.FirstNameKana[firstName]; ok {
-		return kana
-	}
-
-	return f.FirstNameKana()
-}
-
-// FullNameKana はランダムな日本の苗字と名前のフリガナを返します。
-func (f *Faker) FullNameKana() string {
-	return f.LastNameKana() + " " + f.FirstNameKana()
-}
-
-// MobilePhoneNumber はランダムな日本の携帯電話番号を返します。
-func (f *Faker) MobilePhoneNumber() string {
-	prefix := data.Person["mobilePrefix"][f.Rand.Intn(len(data.Person["mobilePrefix"]))]
-	mid := f.Rand.Intn(10000)
-	end := f.Rand.Intn(10000)
-
-	return fmt.Sprintf("%s%03d%04d", prefix, mid, end)
-}
-
-// Hobby はランダムな趣味を返します。
-func (f *Faker) Hobby() string {
-	return data.Person["hobby"][f.Rand.Intn(len(data.Person["hobby"]))]
 }
