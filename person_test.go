@@ -1,10 +1,12 @@
 package jpfaker_test
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
 	jpfaker "github.com/shun-ideguchi/jp-gofaker"
+	"github.com/shun-ideguchi/jp-gofaker/internal/dataset"
 )
 
 func TestPersonNameReturnsPopulatedFields(t *testing.T) {
@@ -48,4 +50,31 @@ func TestPersonFullNameHelpers(t *testing.T) {
 	if !strings.Contains(fullNameKana, " ") {
 		t.Fatalf("full name kana must contain a separator: %q", fullNameKana)
 	}
+}
+
+func TestPersonNameVariantsUseExpectedPools(t *testing.T) {
+	// MaleName、FemaleName、NeutralName が対応する名データ集合から生成することを確認する。
+	g := jpfaker.New(jpfaker.WithSeed(8))
+
+	male := g.Person().MaleName()
+	female := g.Person().FemaleName()
+	neutral := g.Person().NeutralName()
+
+	if !containsName(dataset.PersonFirstNamesMale, male.FirstName, male.FirstNameKana) {
+		t.Fatalf("male name must be chosen from male pool: %+v", male)
+	}
+
+	if !containsName(dataset.PersonFirstNamesFemale, female.FirstName, female.FirstNameKana) {
+		t.Fatalf("female name must be chosen from female pool: %+v", female)
+	}
+
+	if !containsName(dataset.PersonFirstNamesNeutral, neutral.FirstName, neutral.FirstNameKana) {
+		t.Fatalf("neutral name must be chosen from neutral pool: %+v", neutral)
+	}
+}
+
+func containsName(pool []dataset.Name, firstName, firstNameKana string) bool {
+	return slices.ContainsFunc(pool, func(n dataset.Name) bool {
+		return n.Text == firstName && n.Kana == firstNameKana
+	})
 }

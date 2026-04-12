@@ -48,16 +48,11 @@ var PersonLastNames = []Name{
 	{Text: "藤井", Kana: "フジイ"},
 }
 
-var PersonFirstNames = []Name{
-	{Text: "陽菜", Kana: "ヒナ"},
-	{Text: "結菜", Kana: "ユイナ"},
+var PersonFirstNamesMale = []Name{
 	{Text: "蒼", Kana: "アオイ"},
 	{Text: "湊", Kana: "ミナト"},
 	{Text: "蓮", Kana: "レン"},
-	{Text: "凛", Kana: "リン"},
-	{Text: "花", Kana: "ハナ"},
 	{Text: "悠真", Kana: "ユウマ"},
-	{Text: "美咲", Kana: "ミサキ"},
 	{Text: "大翔", Kana: "ヒロト"},
 	{Text: "陽翔", Kana: "ハルト"},
 	{Text: "湊斗", Kana: "ミナト"},
@@ -69,6 +64,19 @@ var PersonFirstNames = []Name{
 	{Text: "奏多", Kana: "カナタ"},
 	{Text: "翔太", Kana: "ショウタ"},
 	{Text: "優斗", Kana: "ユウト"},
+	{Text: "直樹", Kana: "ナオキ"},
+	{Text: "健太", Kana: "ケンタ"},
+	{Text: "拓海", Kana: "タクミ"},
+	{Text: "駿", Kana: "シュン"},
+	{Text: "陽太", Kana: "ヨウタ"},
+}
+
+var PersonFirstNamesFemale = []Name{
+	{Text: "陽菜", Kana: "ヒナ"},
+	{Text: "結菜", Kana: "ユイナ"},
+	{Text: "凛", Kana: "リン"},
+	{Text: "花", Kana: "ハナ"},
+	{Text: "美咲", Kana: "ミサキ"},
 	{Text: "結衣", Kana: "ユイ"},
 	{Text: "紬", Kana: "ツムギ"},
 	{Text: "杏", Kana: "アン"},
@@ -77,16 +85,29 @@ var PersonFirstNames = []Name{
 	{Text: "心春", Kana: "コハル"},
 	{Text: "楓", Kana: "カエデ"},
 	{Text: "結月", Kana: "ユヅキ"},
-	{Text: "凪", Kana: "ナギ"},
 	{Text: "ひなた", Kana: "ヒナタ"},
 	{Text: "彩葉", Kana: "イロハ"},
 	{Text: "菜月", Kana: "ナツキ"},
 	{Text: "遥", Kana: "ハルカ"},
-	{Text: "千尋", Kana: "チヒロ"},
 	{Text: "咲良", Kana: "サクラ"},
 	{Text: "美月", Kana: "ミヅキ"},
-	{Text: "真央", Kana: "マオ"},
-	{Text: "直樹", Kana: "ナオキ"},
-	{Text: "健太", Kana: "ケンタ"},
 	{Text: "麻衣", Kana: "マイ"},
 }
+
+var PersonFirstNamesNeutral = []Name{
+	{Text: "蒼", Kana: "アオイ"},
+	{Text: "凪", Kana: "ナギ"},
+	{Text: "千尋", Kana: "チヒロ"},
+	{Text: "真央", Kana: "マオ"},
+	{Text: "朝陽", Kana: "アサヒ"},
+	{Text: "樹", Kana: "イツキ"},
+	{Text: "楓", Kana: "カエデ"},
+	{Text: "ひなた", Kana: "ヒナタ"},
+	{Text: "光", Kana: "ヒカル"},
+	{Text: "泉", Kana: "イズミ"},
+}
+
+var PersonFirstNames = append(
+	append([]Name{}, PersonFirstNamesMale...),
+	append(PersonFirstNamesFemale, PersonFirstNamesNeutral...)...,
+)
