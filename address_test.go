@@ -2,9 +2,11 @@ package jpfaker_test
 
 import (
 	"regexp"
+	"strings"
 	"testing"
 
 	jpfaker "github.com/shun-ideguchi/jp-gofaker"
+	"github.com/shun-ideguchi/jp-gofaker/internal/dataset"
 )
 
 func TestAddressValueReturnsPopulatedFields(t *testing.T) {
@@ -38,4 +40,29 @@ func TestAddressFullMatchesValue(t *testing.T) {
 	if got, want := fullGenerator.Address().Full(), value.Full(); got != want {
 		t.Fatalf("full address mismatch: got %q want %q", got, want)
 	}
+}
+
+func TestStreetUsesPrefectureSpecificPool(t *testing.T) {
+	// Street が都道府県ごとの町名候補から生成されることを確認する。
+	g := jpfaker.New(jpfaker.WithSeed(9))
+	address := g.Address().Value()
+	streetNames := dataset.StreetNamesByPrefecture[address.Prefecture]
+
+	if len(streetNames) == 0 {
+		t.Fatalf("street pool must exist for prefecture: %q", address.Prefecture)
+	}
+
+	if !hasStreetPrefix(address.Street, streetNames) {
+		t.Fatalf("street %q must use prefecture specific pool for %q", address.Street, address.Prefecture)
+	}
+}
+
+func hasStreetPrefix(street string, candidates []string) bool {
+	for _, candidate := range candidates {
+		if strings.HasPrefix(street, candidate) {
+			return true
+		}
+	}
+
+	return false
 }

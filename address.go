@@ -36,7 +36,8 @@ func (a AddressGenerator) Full() string {
 
 func (a AddressGenerator) Value() AddressValue {
 	postal := dataset.PostalCodes[a.g.rng.Intn(len(dataset.PostalCodes))]
-	streetName := dataset.StreetNames[a.g.rng.Intn(len(dataset.StreetNames))]
+	streetNames := dataset.StreetNamesByPrefecture[postal.Prefecture]
+	streetName := streetNames[a.g.rng.Intn(len(streetNames))]
 	buildingName := dataset.BuildingNames[a.g.rng.Intn(len(dataset.BuildingNames))]
 
 	chome := a.g.rng.Intn(5) + 1
