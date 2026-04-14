@@ -11,35 +11,26 @@ func TestWithSeedProducesDeterministicValues(t *testing.T) {
 	left := jpfaker.New(jpfaker.WithSeed(42))
 	right := jpfaker.New(jpfaker.WithSeed(42))
 
-	if got, want := left.Person().Name(), right.Person().Name(); got != want {
-		t.Fatalf("person mismatch: got %+v want %+v", got, want)
+	tests := []struct {
+		name string
+		got  func() any
+		want func() any
+	}{
+		{name: "person", got: func() any { return left.Person().Name() }, want: func() any { return right.Person().Name() }},
+		{name: "address", got: func() any { return left.Address().Value() }, want: func() any { return right.Address().Value() }},
+		{name: "mobile", got: func() any { return left.Phone().Mobile() }, want: func() any { return right.Phone().Mobile() }},
+		{name: "landline", got: func() any { return left.Phone().Landline() }, want: func() any { return right.Phone().Landline() }},
+		{name: "toll free", got: func() any { return left.Phone().TollFree() }, want: func() any { return right.Phone().TollFree() }},
+		{name: "company name", got: func() any { return left.Company().Name() }, want: func() any { return right.Company().Name() }},
+		{name: "department", got: func() any { return left.Company().Department() }, want: func() any { return right.Company().Department() }},
+		{name: "title", got: func() any { return left.Company().Title() }, want: func() any { return right.Company().Title() }},
 	}
 
-	if got, want := left.Address().Value(), right.Address().Value(); got != want {
-		t.Fatalf("address mismatch: got %+v want %+v", got, want)
-	}
-
-	if got, want := left.Phone().Mobile(), right.Phone().Mobile(); got != want {
-		t.Fatalf("mobile mismatch: got %q want %q", got, want)
-	}
-
-	if got, want := left.Phone().Landline(), right.Phone().Landline(); got != want {
-		t.Fatalf("landline mismatch: got %q want %q", got, want)
-	}
-
-	if got, want := left.Phone().TollFree(), right.Phone().TollFree(); got != want {
-		t.Fatalf("toll free mismatch: got %q want %q", got, want)
-	}
-
-	if got, want := left.Company().Name(), right.Company().Name(); got != want {
-		t.Fatalf("company name mismatch: got %q want %q", got, want)
-	}
-
-	if got, want := left.Company().Department(), right.Company().Department(); got != want {
-		t.Fatalf("department mismatch: got %q want %q", got, want)
-	}
-
-	if got, want := left.Company().Title(), right.Company().Title(); got != want {
-		t.Fatalf("title mismatch: got %q want %q", got, want)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got, want := tt.got(), tt.want(); got != want {
+				t.Fatalf("%s mismatch: got %#v want %#v", tt.name, got, want)
+			}
+		})
 	}
 }

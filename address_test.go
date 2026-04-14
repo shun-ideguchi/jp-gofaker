@@ -42,6 +42,23 @@ func TestAddressFullMatchesValue(t *testing.T) {
 	}
 }
 
+func TestAddressValueUsesMatchingPostalEntry(t *testing.T) {
+	// 郵便番号、都道府県、市区町村が同じ郵便データの組み合わせで返ることを確認する。
+	address := jpfaker.New(jpfaker.WithSeed(10)).Address().Value()
+
+	matched := false
+	for _, postal := range dataset.PostalCodes {
+		if postal.Code == address.PostalCode && postal.Prefecture == address.Prefecture && postal.City == address.City {
+			matched = true
+			break
+		}
+	}
+
+	if !matched {
+		t.Fatalf("address must match a postal dataset entry: %+v", address)
+	}
+}
+
 func TestStreetUsesPrefectureSpecificPool(t *testing.T) {
 	// Street が都道府県ごとの町名候補から生成されることを確認する。
 	g := jpfaker.New(jpfaker.WithSeed(9))
@@ -54,6 +71,23 @@ func TestStreetUsesPrefectureSpecificPool(t *testing.T) {
 
 	if !hasStreetPrefix(address.Street, streetNames) {
 		t.Fatalf("street %q must use prefecture specific pool for %q", address.Street, address.Prefecture)
+	}
+}
+
+func TestAddressBuildingUsesKnownPrefix(t *testing.T) {
+	// Building が既知の建物名候補を接頭辞として含むことを確認する。
+	address := jpfaker.New(jpfaker.WithSeed(11)).Address().Value()
+
+	found := false
+	for _, building := range dataset.BuildingNames {
+		if strings.HasPrefix(address.Building, building) {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		t.Fatalf("building %q must use a known building prefix", address.Building)
 	}
 }
 

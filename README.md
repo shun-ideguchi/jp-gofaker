@@ -111,3 +111,9 @@ fmt.Println(left.Person().FullName() == right.Person().FullName())
 ```bash
 go test ./...
 ```
+
+## サポート方針
+
+- Go の対応バージョンは `go.mod` に記載したメジャー/マイナーバージョンを基準にします
+- CI では `go.mod` の設定に沿って検証します
+- 破壊的変更は `v1.0.0` までは必要に応じて行う可能性があります

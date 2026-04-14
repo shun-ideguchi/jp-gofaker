@@ -26,29 +26,26 @@ func TestPersonNameReturnsPopulatedFields(t *testing.T) {
 func TestPersonFullNameHelpers(t *testing.T) {
 	// FullName 系ヘルパーが Name の内容と一致し、区切りを含むことを確認する。
 	nameGenerator := jpfaker.New(jpfaker.WithSeed(2))
-	fullNameGenerator := jpfaker.New(jpfaker.WithSeed(2))
-	fullNameKanaGenerator := jpfaker.New(jpfaker.WithSeed(2))
-	separatorGenerator := jpfaker.New(jpfaker.WithSeed(2))
-	kanaSeparatorGenerator := jpfaker.New(jpfaker.WithSeed(2))
-
 	name := nameGenerator.Person().Name()
-
-	if got, want := fullNameGenerator.Person().FullName(), name.FullName(); got != want {
-		t.Fatalf("full name mismatch: got %q want %q", got, want)
+	tests := []struct {
+		name string
+		got  func() string
+		want string
+	}{
+		{name: "full name", got: func() string { return jpfaker.New(jpfaker.WithSeed(2)).Person().FullName() }, want: name.FullName()},
+		{name: "full name kana", got: func() string { return jpfaker.New(jpfaker.WithSeed(2)).Person().FullNameKana() }, want: name.FullNameKana()},
 	}
 
-	if got, want := fullNameKanaGenerator.Person().FullNameKana(), name.FullNameKana(); got != want {
-		t.Fatalf("full name kana mismatch: got %q want %q", got, want)
-	}
-
-	fullName := separatorGenerator.Person().FullName()
-	if !strings.Contains(fullName, " ") {
-		t.Fatalf("full name must contain a separator: %q", fullName)
-	}
-
-	fullNameKana := kanaSeparatorGenerator.Person().FullNameKana()
-	if !strings.Contains(fullNameKana, " ") {
-		t.Fatalf("full name kana must contain a separator: %q", fullNameKana)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.got()
+			if got != tt.want {
+				t.Fatalf("%s mismatch: got %q want %q", tt.name, got, tt.want)
+			}
+			if !strings.Contains(got, " ") {
+				t.Fatalf("%s must contain a separator: %q", tt.name, got)
+			}
+		})
 	}
 }
 

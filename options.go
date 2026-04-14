@@ -24,3 +24,9 @@ func WithSeed(seed int64) Option {
 		cfg.rng = rand.New(rand.NewSource(seed))
 	}
 }
+
+func withRandomSource(rng randomSource) Option {
+	return func(cfg *config) {
+		cfg.rng = rng
+	}
+}

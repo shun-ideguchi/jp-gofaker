@@ -15,6 +15,9 @@ func New(opts ...Option) *Generator {
 	for _, opt := range opts {
 		opt(&cfg)
 	}
+	if cfg.rng == nil {
+		cfg.rng = defaultConfig().rng
+	}
 
 	return &Generator{
 		rng: cfg.rng,
