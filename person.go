@@ -39,8 +39,15 @@ func (p PersonGenerator) FullNameKana() string {
 
 // Name returns a generated personal name with kana.
 func (p PersonGenerator) Name() PersonName {
-	last := dataset.PersonLastNames[p.g.rng.Intn(len(dataset.PersonLastNames))]
-	first := dataset.PersonFirstNames[p.g.rng.Intn(len(dataset.PersonFirstNames))]
+	last, ok := pickOne(p.g.rng, dataset.PersonLastNames)
+	if !ok {
+		return PersonName{}
+	}
+
+	first, ok := pickOne(p.g.rng, dataset.PersonFirstNames)
+	if !ok {
+		return PersonName{}
+	}
 
 	return PersonName{
 		LastName:      last.Text,
@@ -66,8 +73,15 @@ func (p PersonGenerator) NeutralName() PersonName {
 }
 
 func (p PersonGenerator) nameFrom(firstNames []dataset.Name) PersonName {
-	last := dataset.PersonLastNames[p.g.rng.Intn(len(dataset.PersonLastNames))]
-	first := firstNames[p.g.rng.Intn(len(firstNames))]
+	last, ok := pickOne(p.g.rng, dataset.PersonLastNames)
+	if !ok {
+		return PersonName{}
+	}
+
+	first, ok := pickOne(p.g.rng, firstNames)
+	if !ok {
+		return PersonName{}
+	}
 
 	return PersonName{
 		LastName:      last.Text,
