@@ -2,10 +2,12 @@ package jpfaker
 
 import "fmt"
 
+// PhoneGenerator generates Japanese phone numbers.
 type PhoneGenerator struct {
 	g *Generator
 }
 
+// Mobile returns a generated mobile phone number.
 func (p PhoneGenerator) Mobile() string {
 	prefixes := []string{"070", "080", "090"}
 
@@ -17,6 +19,7 @@ func (p PhoneGenerator) Mobile() string {
 	)
 }
 
+// Landline returns a generated landline phone number.
 func (p PhoneGenerator) Landline() string {
 	areaCodes := []string{"03", "06", "011", "052", "075", "092"}
 	areaCode := areaCodes[p.g.rng.Intn(len(areaCodes))]
@@ -28,6 +31,7 @@ func (p PhoneGenerator) Landline() string {
 	return fmt.Sprintf("%s-%03d-%04d", areaCode, p.g.rng.Intn(1000), p.g.rng.Intn(10000))
 }
 
+// TollFree returns a generated toll-free phone number.
 func (p PhoneGenerator) TollFree() string {
 	prefixes := []string{"0120", "0800"}
 

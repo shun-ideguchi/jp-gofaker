@@ -9,6 +9,7 @@ type config struct {
 	rng randomSource
 }
 
+// Option configures a Generator.
 type Option func(*config)
 
 func defaultConfig() config {
@@ -17,6 +18,7 @@ func defaultConfig() config {
 	}
 }
 
+// WithSeed makes generated values deterministic for the same seed.
 func WithSeed(seed int64) Option {
 	return func(cfg *config) {
 		cfg.rng = rand.New(rand.NewSource(seed))

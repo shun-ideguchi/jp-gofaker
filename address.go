@@ -6,34 +6,42 @@ import (
 	"github.com/shun-ideguchi/jp-gofaker/internal/dataset"
 )
 
+// AddressGenerator generates Japanese postal addresses.
 type AddressGenerator struct {
 	g *Generator
 }
 
+// PostalCode returns a generated postal code.
 func (a AddressGenerator) PostalCode() string {
 	return a.Value().PostalCode
 }
 
+// Prefecture returns a generated prefecture name.
 func (a AddressGenerator) Prefecture() string {
 	return a.Value().Prefecture
 }
 
+// City returns a generated city or ward name.
 func (a AddressGenerator) City() string {
 	return a.Value().City
 }
 
+// Street returns a generated street-level address.
 func (a AddressGenerator) Street() string {
 	return a.Value().Street
 }
 
+// Building returns a generated building and room representation.
 func (a AddressGenerator) Building() string {
 	return a.Value().Building
 }
 
+// Full returns a generated full address string.
 func (a AddressGenerator) Full() string {
 	return a.Value().Full()
 }
 
+// Value returns a generated address broken into structured fields.
 func (a AddressGenerator) Value() AddressValue {
 	postal := dataset.PostalCodes[a.g.rng.Intn(len(dataset.PostalCodes))]
 	streetNames := dataset.StreetNamesByPrefecture[postal.Prefecture]
